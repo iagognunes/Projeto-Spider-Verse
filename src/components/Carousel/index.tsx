@@ -22,6 +22,8 @@ export default function Carousel({ heroes, activeId }: IProps) {
   const [activeIndex, setActiveIndex] = useState<number>(
     heroes.findIndex((hero) => hero.id === activeId) - 1
   );
+  const [startInteractionPosition, setStartInteractionPosition] =
+    useState<number>(0);
 
   const transitionAudio = useMemo(() => new Audio("/songs/transition.mp3"), []);
 
@@ -85,6 +87,33 @@ export default function Carousel({ heroes, activeId }: IProps) {
     setActiveIndex((prevActiveIndex) => prevActiveIndex + newDirection);
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    setStartInteractionPosition(e.clientX);
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    handleChangeDragTouch(e.clientX);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setStartInteractionPosition(e.touches[0].clientX);
+  };
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleChangeDragTouch(e.changedTouches[0].clientX);
+  };
+
+  const handleChangeDragTouch = (clientX: number) => {
+    if (!startInteractionPosition) {
+      return null;
+    }
+
+    const endInteractPosition = clientX;
+    const diffPosition = endInteractPosition - startInteractionPosition;
+
+    const newPosition = diffPosition > 0 ? -1 : 1;
+    handleChangeActiveIndex(newPosition);
+  };
+
   if (!visibleItens) {
     return null;
   }
@@ -94,7 +123,10 @@ export default function Carousel({ heroes, activeId }: IProps) {
       <div className={styles.carousel}>
         <div
           className={styles.wrapper}
-          onClick={() => handleChangeActiveIndex(1)}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <AnimatePresence mode="popLayout">
             {visibleItens.map((item, position) => (
