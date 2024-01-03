@@ -20,7 +20,7 @@ interface IProps {
 export default function Carousel({ heroes, activeId }: IProps) {
   const [visibleItens, setVisibleItens] = useState<IHeroData[] | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(
-    heroes.findIndex((hero) => hero.id === activeId)
+    heroes.findIndex((hero) => hero.id === activeId) - 1
   );
 
   useEffect(() => {
