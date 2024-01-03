@@ -42,7 +42,7 @@ export default function HeroDetails({ data }: IProps) {
               <td>{details.height.toFixed(2)}m</td>
             </tr>
             <tr>
-              <td className={styles.label}>Altura</td>
+              <td className={styles.label}>Peso</td>
               <td>{details.weight.toFixed(2)}kg</td>
             </tr>
           </tbody>
