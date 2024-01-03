@@ -3,7 +3,8 @@ import { IHeroData } from "@/interfaces/heroes";
 import styles from "./page.module.scss";
 
 async function getHeroesData(): Promise<{ data: IHeroData[] }> {
-  const response = await fetch(`${process.env.DOMAIN_ORIGIN}/api/heroes`);
+  const apiUrl = process.env.DOMAIN_ORIGIN;
+  const response = await fetch(`${apiUrl}/api/heroes`, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error("Failed to request heroes list.");
