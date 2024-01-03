@@ -35,6 +35,22 @@ export default function Carousel({ heroes, activeId }: IProps) {
     setVisibleItens(visibleItens);
   }, [heroes, activeIndex]);
 
+  useEffect(() => {
+    const htmlElement = document.querySelector("html");
+
+    if (!htmlElement || !visibleItens) {
+      return;
+    }
+
+    const currentHeroId = visibleItens[enPosition.MIDDLE].id;
+    htmlElement.style.backgroundImage = `url("/spiders/${currentHeroId}-background.png")`;
+    htmlElement.classList.add("hero-page");
+
+    return () => {
+      htmlElement.classList.remove("hero-page");
+    };
+  }, [visibleItens]);
+
   const handleChangeActiveIndex = (newDirection: number) => {
     setActiveIndex((prevActiveIndex) => prevActiveIndex + newDirection);
   };
